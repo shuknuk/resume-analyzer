@@ -15,7 +15,7 @@ app = FastAPI()
 # Define the list of "origins" (websites) that are allowed to make requests
 origins = [
     "http://localhost:3000", # The address of our Next.js frontend
-    "https://resume-analyzer-frontend-seven.vercel.app/"
+    "https://resume-analyzer-frontend-seven.vercel.app"
 ]
 
 app.add_middleware(
