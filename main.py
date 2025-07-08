@@ -38,6 +38,7 @@ except ValueError as e:
 # --- Pydantic Models ---
 class ResumeData(BaseModel):
     resume_text: str
+    job_description: str | None = None # <-- UPDATE THIS
 
 # --- API Endpoints ---
 @app.get("/")
@@ -47,12 +48,12 @@ def read_root():
 @app.post("/analyze")
 async def analyze_resume(data: ResumeData):
     try:
-        # Configure the model to return JSON
         generation_config = {"response_mime_type": "application/json"}
         model = genai.GenerativeModel('gemini-1.5-flash-latest', generation_config=generation_config)
 
-        # New, more detailed prompt asking for a specific JSON structure
-        prompt = f"""
+        # --- UPDATE THIS WHOLE SECTION ---
+        # Start with the base prompt
+        prompt_template = """
         You are an expert career coach and professional resume reviewer for tech roles.
         Analyze the following resume text and respond with ONLY a valid JSON object.
         The JSON object must follow this exact structure:
@@ -63,7 +64,23 @@ async def analyze_resume(data: ResumeData):
           "strengths": [<an array of strings, where each string is a specific, actionable strength>],
           "improvements": [<an array of strings, where each string is a specific, actionable area for improvement>]
         }}
+        """
 
+        # If a job description is provided, add comparison instructions to the prompt
+        if data.job_description and data.job_description.strip():
+            prompt_template += f"""
+            Crucially, you must tailor your analysis by comparing the resume against the following job description.
+            The score should reflect how well the resume is tailored for this specific job.
+            The keywords, strengths, and improvements should all be in the context of this job description.
+
+            JOB DESCRIPTION:
+            ---
+            {data.job_description}
+            ---
+            """
+
+        # Add the resume text to the final prompt
+        prompt = prompt_template + f"""
         Here is the resume text to analyze:
         ---
         {data.resume_text}
@@ -72,10 +89,8 @@ async def analyze_resume(data: ResumeData):
 
         response = await model.generate_content_async(prompt)
         
-        # The response text should be a JSON string, so we parse it.
         analysis_data = json.loads(response.text)
         
-        # We now return the structured data directly
         return {"analysis": analysis_data}
 
     except Exception as e:
