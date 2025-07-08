@@ -49,7 +49,10 @@ def read_root():
 async def analyze_resume(data: ResumeData):
     try:
         generation_config = {"response_mime_type": "application/json"}
-        model = genai.GenerativeModel('gemini-1.5-flash-latest', generation_config=generation_config)
+        model = genai.GenerativeModel('gemini-2.5-pro', generation_config=generation_config)
+
+        # model = genai.GenerativeModel('gemini-1.5-flash-latest', generation_config=generation_config)
+        
 
         # --- UPDATE THIS WHOLE SECTION ---
         # Start with the base prompt
