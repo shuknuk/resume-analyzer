@@ -47,7 +47,7 @@ class ResumeData(BaseModel):
 
 # 1. The LLM (The "Brain")
 # We initialize our Gemini model through the LangChain adapter.
-llm = ChatGoogleGenerativeAI(model="gemini-1.5-flash-latest", temperature=0.5)
+llm = ChatGoogleGenerativeAI(model="gemini-2.5-pro", temperature=0.5)
 
 # 2. The Tools (The "Hands")
 # We define the tools the agent can use. For now, just one: Tavily web search.
