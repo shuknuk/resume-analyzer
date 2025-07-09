@@ -43,3 +43,4 @@ uvicorn==0.35.0
 langchain
 langchain-google-genai
 tavily-python
+langchain-community
