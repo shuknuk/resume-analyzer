@@ -5,8 +5,8 @@ uvicorn
 # Environment and API Keys
 python-dotenv
 
-# LangChain and AI Tools
-langchain==0.2.1
-langchain-google-genai==1.0.3
-langchain-community==0.2.1
+# LangChain and AI Tools (Updated compatible versions)
+langchain==0.2.5
+langchain-google-genai==1.0.5
+langchain-community==0.2.5
 tavily-python
