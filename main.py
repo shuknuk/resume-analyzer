@@ -44,7 +44,7 @@ class ResumeData(BaseModel):
 
 
 # --- LangChain Agent Setup ---
-llm = ChatGoogleGenerativeAI(model="gemini-1.5-pro-latest", temperature=0.5) # Using Pro for higher quality reasoning
+llm = ChatGoogleGenerativeAI(model="gemini-2.5-pro", temperature=0.5) # Using Pro for higher quality reasoning
 tools = [TavilySearchResults(max_results=3)]
 
 # NEW, more detailed and general-purpose prompt template
