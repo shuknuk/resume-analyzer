@@ -44,10 +44,9 @@ class ResumeData(BaseModel):
 
 
 # --- LangChain Agent Setup ---
-llm = ChatGoogleGenerativeAI(model="gemini-2.5-pro", temperature=0.5) # Using Pro for higher quality reasoning
+llm = ChatGoogleGenerativeAI(model="gemini-2.5-pro", temperature=0.5)
 tools = [TavilySearchResults(max_results=3)]
 
-# NEW, more detailed and general-purpose prompt template
 prompt = PromptTemplate.from_template("""
 You are an expert career coach and professional resume strategist. Your goal is to provide a detailed, objective, and constructive analysis of a resume, delivered in a structured JSON format.
 
@@ -88,7 +87,8 @@ agent_executor = AgentExecutor(
     agent=agent,
     tools=tools,
     verbose=True,
-    handle_parsing_errors=True
+    handle_parsing_errors=True,
+    return_intermediate_steps=True # This is the key to getting the log!
 )
 
 def _parse_json_from_string(text: str) -> dict:
@@ -104,6 +104,10 @@ def _parse_json_from_string(text: str) -> dict:
         raise e
 
 # --- API Endpoints ---
+@app.get("/")
+def read_root():
+    return {"message": "LangChain Resume Agent API is running."}
+
 @app.post("/analyze")
 async def analyze_resume(data: ResumeData):
     try:
@@ -115,8 +119,21 @@ async def analyze_resume(data: ResumeData):
             input_text += f"\nAlso, provide extra insights by researching this company:\n---{data.company_name}\n---"
 
         response = await agent_executor.ainvoke({"input": input_text})
+        
+        # Extract the final answer
         analysis_data = _parse_json_from_string(response['output'])
-        return {"analysis": analysis_data}
+        
+        # Format the intermediate steps into a clean log string
+        log_string = ""
+        for step in response.get('intermediate_steps', []):
+            action, observation = step
+            log_string += f"Thought: {action.log.strip()}\n"
+            log_string += f"Action: {action.tool}\n"
+            log_string += f"Action Input: {action.tool_input}\n"
+            log_string += f"Observation: {observation}\n\n"
+
+        # Return both the analysis and the log
+        return {"analysis": analysis_data, "log": log_string}
 
     except Exception as e:
         print(f"An error occurred: {e}")
