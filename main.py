@@ -1,3 +1,4 @@
+# main.py
 import os
 import json
 from fastapi import FastAPI, HTTPException
@@ -43,33 +44,37 @@ class ResumeData(BaseModel):
 
 
 # --- LangChain Agent Setup ---
-llm = ChatGoogleGenerativeAI(model="gemini-1.5-flash-latest", temperature=0.5)
+llm = ChatGoogleGenerativeAI(model="gemini-1.5-pro-latest", temperature=0.5) # Using Pro for higher quality reasoning
 tools = [TavilySearchResults(max_results=3)]
 
-# --- THE FIX IS HERE: Using the full, correct prompt template ---
+# NEW, more detailed and general-purpose prompt template
 prompt = PromptTemplate.from_template("""
-You are an expert career coach and professional resume reviewer for tech roles.
-Your goal is to provide a structured JSON response to help the user improve their resume.
+You are an expert career coach and professional resume strategist. Your goal is to provide a detailed, objective, and constructive analysis of a resume, delivered in a structured JSON format.
 
 You have access to the following tools:
 {tools}
 
 To get your final answer, you must use the following format:
 
-Question: the user's request, including the resume and job description.
-Thought: you should always think about what to do.
+Question: the user's request, including the resume and any optional context.
+Thought: you should always think about what to do. If a company name is provided, you should use your search tool to research the company's industry, values, and recent news. This is critical for providing tailored feedback.
 Action: the action to take, should be one of [{tool_names}].
 Action Input: the input to the action.
 Observation: the result of the action.
 ... (this Thought/Action/Action Input/Observation can repeat N times)
-Thought: I now know the final answer.
+Thought: I now have all the information I need to provide a comprehensive analysis.
 Final Answer: a valid JSON object that follows this exact structure:
 {{
-  "score": <an integer score from 0 to 100>,
-  "summary": "<a one-sentence summary>",
-  "keywords": [<an array of 5-7 relevant keywords>],
-  "strengths": [<an array of strings>],
-  "improvements": [<an array of strings>]
+  "score": <an integer score from 0 to 100 representing the resume's overall quality and fit, if context is provided>,
+  "scoreRationale": "<A brief, one-sentence explanation for why you gave that score>",
+  "strengths": [<an array of 2-4 strings, where each string is a specific, actionable strength>],
+  "improvements": [
+    {{
+      "suggestion": "<A concise heading for the improvement area, e.g., 'Quantify Achievements'>",
+      "explanation": "<A one-sentence explanation of WHY this improvement is important>",
+      "example": "<A concrete 'before' and 'after' example. e.g., 'Instead of: Managed a project. Try: Managed a 3-month project with a $5k budget, resulting in a 15% increase in user engagement.'>"
+    }}
+  ]
 }}
 
 Begin!
@@ -98,25 +103,19 @@ def _parse_json_from_string(text: str) -> dict:
         print(f"Error parsing JSON from agent response: {e}")
         raise e
 
-
 # --- API Endpoints ---
-@app.get("/")
-def read_root():
-    return {"message": "LangChain Resume Agent API is running."}
-
 @app.post("/analyze")
 async def analyze_resume(data: ResumeData):
     try:
-        input_text = f"Resume:\n{data.resume_text}\n"
-        if data.job_description:
-            input_text += f"\nJob Description:\n{data.job_description}\n"
-        if data.company_name:
-            input_text += f"\nCompany to research:\n{data.company_name}\n"
+        # Build the input text dynamically
+        input_text = f"Analyze this resume:\n---{data.resume_text}\n---"
+        if data.job_description and data.job_description.strip():
+            input_text += f"\nTailor the analysis for this specific job description:\n---{data.job_description}\n---"
+        if data.company_name and data.company_name.strip():
+            input_text += f"\nAlso, provide extra insights by researching this company:\n---{data.company_name}\n---"
 
         response = await agent_executor.ainvoke({"input": input_text})
-        
         analysis_data = _parse_json_from_string(response['output'])
-
         return {"analysis": analysis_data}
 
     except Exception as e:
