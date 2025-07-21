@@ -21,7 +21,8 @@ app = FastAPI()
 # --- CORS Configuration ---
 origins = [
     "http://localhost:3000",
-    "https://resume-analyzer-frontend-seven.vercel.app"
+    "https://resume-analyzer-frontend-seven.vercel.app",
+    "https://ranalyzer.vercel.app"
 ]
 app.add_middleware(
     CORSMiddleware,
