@@ -45,7 +45,7 @@ class ResumeData(BaseModel):
 
 
 # --- LangChain Agent Setup ---
-llm = ChatGoogleGenerativeAI(model="gemini-2.5-pro", temperature=0.5)
+llm = ChatGoogleGenerativeAI(model="gemini-2.5-flash", temperature=0.5)
 tools = [TavilySearchResults(max_results=3)]
 
 prompt = PromptTemplate.from_template("""
