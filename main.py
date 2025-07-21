@@ -54,15 +54,15 @@ You are an expert career coach and professional resume strategist. Your goal is 
 You have access to the following tools:
 {tools}
 
-To get your final answer, you must use the following format:
+Use the following format:
 
-Question: the user's request, including the resume and any optional context.
-Thought: you should always think about what to do. If a company name is provided, you should use your search tool to research the company's industry, values, and recent news. This is critical for providing tailored feedback.
-Action: the action to take, should be one of [{tool_names}].
-Action Input: the input to the action.
-Observation: the result of the action.
+Question: the input question you must answer
+Thought: you should always think about what to do
+Action: the action to take, should be one of [{tool_names}]
+Action Input: the input to the action
+Observation: the result of the action
 ... (this Thought/Action/Action Input/Observation can repeat N times)
-Thought: I now have all the information I need to provide a comprehensive analysis.
+Thought: I now know the final answer
 Final Answer: a valid JSON object that follows this exact structure:
 {{
   "score": <an integer score from 0 to 100 representing the resume's overall quality and fit, if context is provided>,
@@ -127,11 +127,21 @@ async def analyze_resume(data: ResumeData):
         # Format the intermediate steps into a clean log string
         log_string = ""
         for step in response.get('intermediate_steps', []):
-            action, observation = step
-            log_string += f"Thought: {action.log.strip()}\n"
-            log_string += f"Action: {action.tool}\n"
-            log_string += f"Action Input: {action.tool_input}\n"
-            log_string += f"Observation: {observation}\n\n"
+            try:
+                action, observation = step
+                # Handle both AgentAction objects and other formats
+                if hasattr(action, 'log'):
+                    log_string += f"Thought: {action.log.strip()}\n"
+                if hasattr(action, 'tool'):
+                    log_string += f"Action: {action.tool}\n"
+                elif hasattr(action, 'name'):
+                    log_string += f"Action: {action.name}\n"
+                if hasattr(action, 'tool_input'):
+                    log_string += f"Action Input: {action.tool_input}\n"
+                log_string += f"Observation: {observation}\n\n"
+            except Exception as log_error:
+                print(f"Error processing log step: {log_error}")
+                log_string += f"Step: {step}\n\n"
 
         # Return both the analysis and the log
         return {"analysis": analysis_data, "log": log_string}
