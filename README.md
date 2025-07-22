@@ -17,7 +17,7 @@ This backend implements the **ReAct (Reason and Act)** framework to create an au
 * **Framework:** [FastAPI](https://fastapi.tiangolo.com/)
 * **Language:** [Python](https://www.python.org/)
 * **AI Agent Framework:** [LangChain](https://www.langchain.com/)
-* **LLM:** [Google Gemini 2.5 Pro](https://ai.google.dev/models/gemini)
+* **LLM:** [Google Gemini 2.5 Flash](https://ai.google.dev/models/gemini)
 * **Agent Tools:** [Tavily Search API](https://tavily.com/)
 * **Containerization:** [Docker](https://www.docker.com/)
 * **Deployment:** [Render](https://render.com/)
