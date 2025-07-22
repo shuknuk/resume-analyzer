@@ -1,0 +1,82 @@
+John Doe
+Software Engineer
+Email: john.doe@email.com
+Phone: (555) 123-4567
+Location: San Francisco, CA
+LinkedIn: linkedin.com/in/johndoe
+
+PROFESSIONAL SUMMARY
+Experienced software engineer with 5+ years developing web applications using JavaScript, React, and Node.js. Proven track record of delivering scalable solutions and leading cross-functional teams. Passionate about clean code and user experience.
+
+WORK EXPERIENCE
+
+Senior Software Engineer | TechCorp Inc. | 2022-Present
+• Led development of customer-facing web application serving 100K+ users
+• Implemented React components and Redux state management
+• Collaborated with product managers and designers on feature requirements
+• Mentored 2 junior developers and conducted code reviews
+
+Software Engineer | StartupXYZ | 2020-2022
+• Built RESTful APIs using Node.js and Express framework
+• Integrated third-party payment systems (Stripe, PayPal)
+• Optimized database queries reducing response times by 40%
+• Participated in agile development process and sprint planning
+
+Junior Developer | WebSolutions LLC | 2019-2020
+• Developed responsive websites using HTML, CSS, and JavaScript
+• Fixed bugs and maintained existing client websites
+• Learned version control with Git and deployment processes
+
+EDUCATION
+Bachelor of Science in Computer Science
+University of California, Berkeley | 2015-2019
+
+SKILLS
+Programming Languages: JavaScript, TypeScript, Python, Java
+Frontend: React, Vue.js, HTML5, CSS3, Sass
+Backend: Node.js, Express, Django, Spring Boot
+Databases: PostgreSQL, MongoDB, Redis
+Tools: Git, Docker, AWS, Jenkins, Jira
+```
+
+# Sample Job Description
+
+```
+Senior Full Stack Developer - SaaS Platform
+
+About the Role:
+We are seeking a Senior Full Stack Developer to join our growing engineering team. You will be responsible for building and maintaining our cloud-based SaaS platform that serves enterprise customers worldwide.
+
+Key Responsibilities:
+• Design and develop scalable web applications using modern JavaScript frameworks
+• Build and maintain RESTful APIs and microservices
+• Collaborate with product team to translate requirements into technical solutions
+• Optimize application performance and ensure high availability
+• Mentor junior developers and participate in code reviews
+• Work with DevOps team on deployment and monitoring
+
+Required Qualifications:
+• 4+ years of experience in full stack development
+• Strong proficiency in JavaScript/TypeScript and React
+• Experience with Node.js and Express framework
+• Knowledge of SQL and NoSQL databases
+• Experience with cloud platforms (AWS, Azure, or GCP)
+• Understanding of agile development methodologies
+• Bachelor's degree in Computer Science or related field
+
+Preferred Qualifications:
+• Experience with Docker and Kubernetes
+• Knowledge of GraphQL
+• Previous experience in SaaS or enterprise software
+• Experience with automated testing frameworks
+• Strong communication and leadership skills
+
+Company: InnovateTech Solutions
+Location: Remote/Hybrid (San Francisco Bay Area)
+```
+
+# Sample Company Name
+
+```
+InnovateTech Solutions
+```
