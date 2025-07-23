@@ -49,7 +49,7 @@ class ResumeData(BaseModel):
 
 
 # --- LangChain Agent Setup ---
-llm = ChatGoogleGenerativeAI(model="gemini-1.5-flash", temperature=0.3) # Confirmed model name
+llm = ChatGoogleGenerativeAI(model="gemini-2.5-flash", temperature=0.3) # Confirmed model name
 tools = [TavilySearchResults(max_results=3)]
 
 # --- Improved Prompt ---
